@@ -5,7 +5,7 @@ using UnityEngine;
 public class SwipeManager : MonoBehaviour
 {
     public bool tap, swipeLeft, swipeRight;
-    public bool isDragging = false;
+    public bool isDragging = false; 
     public Vector2 startTouch, swipeDelta;
 
 
@@ -58,7 +58,7 @@ public class SwipeManager : MonoBehaviour
                 swipeDelta = (Vector2)Input.mousePosition - startTouch;
             }
         }
-        if (swipeDelta.magnitude > 80)
+        if (swipeDelta.magnitude > 40)
         {
             float x = swipeDelta.x;
             if (x < 0)
@@ -76,6 +76,7 @@ public class SwipeManager : MonoBehaviour
     {
 
         startTouch = swipeDelta = Vector2.zero;
+       
         isDragging = false;
     }
 }

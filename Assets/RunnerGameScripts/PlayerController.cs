@@ -5,92 +5,112 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private CharacterController controller;
+   
     public SwipeManager swipe; 
     public Transform player;
-    public playermanager playermanager;
-    private Vector3 desiredPosition; 
-    
-   
-    public float forwardSpeed; 
-    
+    public PlayerManager playerManager;
+     
 
-    
+    public Vector3 zMove; 
+    public Vector3 desiredPosition; 
+    public float swipeSensivity;
+    private Vector3 swipeVector = new Vector3(0,0,0);
+    public float swipeSpeed = 5.0f;
+    public float forwardSpeed;
+    public Vector3 desiredHorizontal; 
+   
     
     public Animator animator; 
     
     void Start()
-    {
-        controller = GetComponent<CharacterController>();
-        animator = GetComponent<Animator>();
-        forwardSpeed = 5.0f;
-        
-        
-       
-        
+	{  
+		forwardSpeed = 2.0f;
+        swipeSensivity = 2.0f;
+        swipeSpeed = 2.0f;
+        zMove = new Vector3 (0, 0, 1); 
     }
 
-    
+    public void StartRunning()
+	{
+        PlayRunAnimation();
+    }
+
     void Update()
     {
-		if (!playermanager.isGameStarted || playermanager.gameOver)
+		if (!playerManager.isGameStarted || playerManager.gameOver)
 		{
             return; 
 		}
-        
-        animator.SetBool("isGameStarted", true);
-		
-           desiredPosition.z = forwardSpeed;
        
 
+        zMove += Vector3.forward*forwardSpeed;
+        
+        
 
-        isGameOver(player.transform.position.z);
+
 
         if (swipe.swipeLeft)
         {
+            print("left swipe");
+
+            print(swipe.swipeDelta); 
+            swipeVector.x -=swipeSensivity;
             
-            desiredPosition += Vector3.left;
-           
-            
-        }
-        if (swipe.swipeRight)
-        {
-            desiredPosition += Vector3.right;
-           
-
-        }
-
-        //player.transform.position = Vector3.MoveTowards(player.transform.position, desiredPosition, 150f * Time.deltaTime);   
-
-
-       
+            print(" Swipe Vector =   " + swipeVector);
          
+          
+
+
+        }
+        else if (swipe.swipeRight)
+        {
+            print("right swipe");
+            print(swipe.swipeDelta);
+            swipeVector.x+=swipeSensivity;
+           
+            print(" Swipe Vector =   " + swipeVector);
+
+
+		}
+
+		//desiredPosition = swipeVector + zMove;
+
+
+ //       desiredHorizontal = Vector3.MoveTowards(player.transform.position, desiredPosition, swipeSpeed * Time.fixedDeltaTime);
+
+
+
+   //     player.transform.position = new Vector3(desiredPosition.x, player.transform.position.y, desiredHorizontal.z);
+
+        //  print("Desired Position" + desiredPosition);
+        CheckGameOver(player.transform.position.z);
+
     }
-    public void isGameOver(float distance)
+    
+	public void PlayRunAnimation()
+	{
+		if (playerManager.isGameStarted)
+		{
+            animator.SetBool("isGameStarted", true);
+        }
+	}
+
+    public void PlayDanceAnimation()
+    {
+        if (playerManager.gameOver)
+        {
+            animator.SetBool("isGameStarted", false);
+            animator.SetBool("isGameEnded", true);
+        }
+    }
+
+    public void CheckGameOver(float distance)
 	{
         if (distance >=  100)
 		{
-            animator.SetBool("isGameEnded", true);
-            playermanager.gameOver = true;
-           
-			
-             
-		}
+            playerManager.gameOver = true;
+            PlayDanceAnimation();
+        }
 	}
     
-	private void FixedUpdate()
-	{
-        if (!playermanager.isGameStarted || playermanager.gameOver)
-        {
-            return;
-        }
-       
-        if (player.transform.position.x >=-5.5 && player.transform.position.x <= 5.5)
-		{
-            controller.Move(desiredPosition * Time.fixedDeltaTime);
-        }
-       
-        
-
-    }
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 public class Rotation : MonoBehaviour
 {
     public float smooth;
-    public playermanager playermanager; 
+    public PlayerManager playermanager; 
     private Vector3 targetAngles;
     public bool isRotated = false; 
     

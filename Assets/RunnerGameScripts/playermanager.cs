@@ -4,13 +4,14 @@ using UnityEngine;
 using UnityEngine.UI;
 
 
-public class playermanager : MonoBehaviour
+public class PlayerManager : MonoBehaviour
 {
     public Text gameOverText;
     public bool gameOver;
     public GameObject startingText;
     public SwipeManager swipe;
-    public PlayerController playercontroller; 
+    public PlayerController playercontroller;
+    public GameObject endingCamera; 
     
 
     public bool isGameStarted;
@@ -29,15 +30,19 @@ public class playermanager : MonoBehaviour
 		if (gameOver)
 		{
             Time.timeScale = 1.0f;
+
+            endingCamera.SetActive(true); 
             
-           
+            
            
             
 		}
-		if (swipe.tap)
+		if (swipe.tap && !isGameStarted)
 		{
             isGameStarted = true;
-            Destroy(startingText); 
+            startingText.SetActive(false);
+
+            playercontroller.StartRunning();
 		}
     }
 }

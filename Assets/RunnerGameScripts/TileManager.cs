@@ -6,16 +6,16 @@ public class TileManager : MonoBehaviour
 {
     public GameObject tile;
   
-    public float spawn;
+    public float spawnCounter;
     public float tileLength;
     
     
    
     void Start()
     {
-        spawn = 0.0f;
+        spawnCounter = 0.0f;
         tileLength = 10f; 
-        for(int i = 0; i <10; i++)
+        for(int i = 0; i <50; i++)
 		{
              
             SpawnTile();
@@ -23,14 +23,11 @@ public class TileManager : MonoBehaviour
     }
 
     
-    void Update()
-    {
-       
-    }
+    
     public void SpawnTile()
 	{
-        Instantiate(tile, transform.forward * spawn, transform.rotation);
-        spawn += tileLength;
+        Instantiate(tile, transform.forward * spawnCounter, transform.rotation);
+        spawnCounter += tileLength;
 	
     }
 }
